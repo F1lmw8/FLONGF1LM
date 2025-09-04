@@ -87,20 +87,10 @@ export async function POST(req: NextRequest){
     entries.push(entry)
   }
 
-  // Save to database (with fallback to file)
-  try {
-    const { addPhoto } = await import('@/lib/database')
-    for (const entry of entries) {
-      await addPhoto(entry)
-    }
-  } catch (error) {
-    console.error('Database save failed, falling back to file:', error)
-    // Fallback to file system
-    const feedPath = path.join(process.cwd(), 'data', 'feed.json')
-    const raw = await fs.readFile(feedPath, 'utf8')
-    const list = JSON.parse(raw)
-    list.push(...entries)
-    await fs.writeFile(feedPath, JSON.stringify(list, null, 2))
+  // Save to database only
+  const { addPhoto } = await import('@/lib/database')
+  for (const entry of entries) {
+    await addPhoto(entry)
   }
 
   return NextResponse.json({ success: true, entries })
