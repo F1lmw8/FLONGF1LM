@@ -1,15 +1,21 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(){
-  const res = NextResponse.redirect(new URL('/', 'http://localhost:3000'))
-  res.cookies.set('admin', '', { httpOnly: true, path: '/', maxAge: 0 })
-  return res
+export const runtime = 'nodejs';
+
+function clearAdminCookie(res: NextResponse) {
+  res.cookies.set('admin', '', { httpOnly: true, path: '/', maxAge: 0 });
 }
 
-export async function GET(){
-  const res = NextResponse.redirect(new URL('/admin/login', 'http://localhost:3000'))
-  res.cookies.set('admin', '', { httpOnly: true, path: '/', maxAge: 0 })
-  return res
+export async function POST(req: NextRequest) {
+  const res = NextResponse.redirect(new URL('/', req.url), { status: 302 });
+  clearAdminCookie(res);
+  return res;
+}
+
+export async function GET(req: NextRequest) {
+  const res = NextResponse.redirect(new URL('/', req.url), { status: 302 });
+  clearAdminCookie(res);
+  return res;
 }
 
 
