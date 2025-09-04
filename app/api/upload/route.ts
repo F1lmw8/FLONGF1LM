@@ -122,16 +122,47 @@ export async function POST(req: NextRequest) {
         }
         entries.push(entry)
 
-        // Save to database
-        const { addPhoto } = await import('@/lib/database')
-        await addPhoto(entry)
-
       } catch (fileError) {
         console.error(`Error processing file ${(f as any).name}:`, fileError)
         errors.push({
           filename: (f as any).name || 'unknown',
           error: fileError instanceof Error ? fileError.message : 'Unknown error'
         })
+      }
+    }
+
+    // Save successful uploads to database
+    const { addPhoto, initDatabase } = await import('@/lib/database')
+    
+    // Initialize database if needed
+    try {
+      await initDatabase()
+    } catch (initError) {
+      console.error('Database initialization failed:', initError)
+      return NextResponse.json({
+        ok: false,
+        error: 'Database initialization failed',
+        errors: entries.map(entry => ({
+          filename: entry.alt || 'unknown',
+          error: 'Database initialization failed'
+        }))
+      }, { status: 500 })
+    }
+    
+    for (const entry of entries) {
+      try {
+        await addPhoto(entry)
+      } catch (dbError) {
+        console.error(`Error saving to database:`, dbError)
+        // Remove from entries if database save failed
+        const index = entries.indexOf(entry)
+        if (index > -1) {
+          entries.splice(index, 1)
+          errors.push({
+            filename: entry.alt || 'unknown',
+            error: 'Database save failed'
+          })
+        }
       }
     }
 
