@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 type Item = {
   id:string; src:string; w:number; h:number; alt?:string;
   date?:string; tags?:string[]; watermark?:boolean; overlay?:boolean;
-  camera?:string; lens?:string; fNumber?:number; iso?:number;
+  camera?:string; lens?:string; fNumber?:number; iso?:number|string;
   albumId?:string; albumTitle?:string;
 }
 
@@ -92,7 +92,7 @@ export default function AdminManagePage(){
               <input className="px-3 py-2 rounded border" placeholder="camera" value={editing.camera||''} onChange={e=>setEditing({ ...editing, camera: e.target.value })} />
               <input className="px-3 py-2 rounded border" placeholder="lens" value={editing.lens||''} onChange={e=>setEditing({ ...editing, lens: e.target.value })} />
               <input className="px-3 py-2 rounded border" placeholder="f-number" value={editing.fNumber?.toString()||''} onChange={e=>setEditing({ ...editing, fNumber: Number(e.target.value)||undefined })} />
-              <input className="px-3 py-2 rounded border" placeholder="ISO" value={editing.iso?.toString()||''} onChange={e=>setEditing({ ...editing, iso: Number(e.target.value)||undefined })} />
+              <input className="px-3 py-2 rounded border" placeholder="ISO (auto)" value={editing.iso?.toString()||''} onChange={e=>setEditing({ ...editing, iso: e.target.value === 'auto' ? 'auto' : (Number(e.target.value)||undefined) })} />
             </div>
             <div className="grid grid-cols-2 gap-2">
               <input className="px-3 py-2 rounded border" placeholder="albumId" value={editing.albumId||''} onChange={e=>setEditing({ ...editing, albumId: e.target.value })} />

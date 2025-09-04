@@ -23,7 +23,7 @@ export async function initDatabase() {
         camera TEXT,
         lens TEXT,
         f_number INTEGER,
-        iso INTEGER,
+        iso TEXT,
         album_id TEXT,
         album_title TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

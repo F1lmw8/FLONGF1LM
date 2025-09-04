@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react'
 export type FeedItem = {
   id:string; src:string; w:number; h:number; alt?:string;
   date?:string; tags?:string[]; watermark?:boolean; overlay?:boolean;
-  camera?: string; lens?: string; fNumber?: number; iso?: number
+  camera?: string; lens?: string; fNumber?: number; iso?: number|string
   albumId?: string; albumTitle?: string
 }
 export type FilterState = { q:string; tag:string|'' }
