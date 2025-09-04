@@ -6,6 +6,14 @@ import cloudinary from '@/lib/cloudinary'
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
+// Sanitize string for Cloudinary public_id (only alphanumeric, underscore, hyphen)
+function sanitizePublicId(str: string): string {
+  return str
+    .replace(/[^a-zA-Z0-9_-]/g, '_') // Replace invalid chars with underscore
+    .replace(/_{2,}/g, '_') // Replace multiple underscores with single
+    .replace(/^_|_$/g, '') // Remove leading/trailing underscores
+}
+
 // Using Web FormData parsing provided by NextRequest in Node runtime
 
 export async function POST(req: NextRequest) {
@@ -81,12 +89,23 @@ export async function POST(req: NextRequest) {
         context.overlay = String(overlay)
 
         // Upload to Cloudinary
-        const folder = albumId ? `portfolio/${albumId}` : 'portfolio'
+        const sanitizedAlbumId = albumId ? sanitizePublicId(albumId) : null
+        const folder = sanitizedAlbumId ? `portfolio/${sanitizedAlbumId}` : 'portfolio'
+        const sanitizedFilename = sanitizePublicId(filename.replace(/\.[^/.]+$/, "")) // Remove extension and sanitize
+        
+        console.log('Cloudinary upload:', {
+          originalAlbumId: albumId,
+          sanitizedAlbumId,
+          originalFilename: filename,
+          sanitizedFilename,
+          folder
+        })
+        
         const result = await new Promise((resolve, reject) => {
           cloudinary.uploader.upload_stream(
             {
               folder,
-              public_id: filename.replace(/\.[^/.]+$/, ""), // Remove extension
+              public_id: sanitizedFilename,
               resource_type: 'auto',
               context: context
             },
