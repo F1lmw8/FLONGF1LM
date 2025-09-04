@@ -10,16 +10,24 @@ export const runtime = 'nodejs'
 
 export async function POST(req: NextRequest) {
   try {
+    console.log('=== UPLOAD API START ===')
+    
     // Auth via HttpOnly cookie set by /api/auth
     const cookieStore = await cookies()
     const isAuthed = cookieStore.get('admin')?.value === '1'
+    console.log('Auth check:', isAuthed)
+    
     if (!isAuthed) {
+      console.log('Unauthorized access')
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     // Use Node.js Request to parse formdata instead (Web FormData)
+    console.log('Parsing form data...')
     const formData = await req.formData()
     const files = formData.getAll('file') as unknown as File[]
+    console.log('Files count:', files.length)
+    
     const alt = String(formData.get('alt') || '')
     const caption = String(formData.get('caption') || '')
     const tagsStr = String(formData.get('tags') || '')
@@ -31,6 +39,14 @@ export async function POST(req: NextRequest) {
     const isoForm = String(formData.get('iso') || '')
     const albumId = String(formData.get('albumId') || '')
     const albumTitle = String(formData.get('albumTitle') || '')
+    
+    console.log('Form data parsed:', {
+      filesCount: files.length,
+      fNumberForm,
+      cameraForm,
+      lensForm,
+      isoForm
+    })
 
     if (!files || files.length === 0) {
       return NextResponse.json({ error: 'No file' }, { status: 400 })
