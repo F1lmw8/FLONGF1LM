@@ -29,7 +29,9 @@ export async function DELETE(req: NextRequest){
         const publicId = photo.src.split('/').slice(-2).join('/').replace(/\.[^/.]+$/, "")
         await cloudinary.uploader.destroy(publicId)
       }
-    } catch {}
+    } catch {
+      // Ignore Cloudinary deletion errors
+    }
 
     return NextResponse.json({ success:true })
   } catch (error) {

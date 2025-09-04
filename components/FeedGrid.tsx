@@ -65,7 +65,6 @@ export default function FeedGrid({ items }: { items: FeedItem[] }) {
                       info={(() => {
                         const camera = p.camera
                         const lensAndF = [p.lens, p.fNumber && `f/${p.fNumber}`, p.iso && `ISO ${p.iso}`].filter(Boolean).map(item => `• ${item}`).join(' ')
-                        const isLong = lensAndF.length > 20
                         
                         return [
                           p.alt + (camera ? ` • ${camera}` : ''),

@@ -13,7 +13,7 @@ type Props = {
   watermark?: boolean
 }
 
-export default function ImageCard({ src, w, h, alt='', caption, info, overlay=true, watermark=true }: Props){
+export default function ImageCard({ src, w, h, alt='', info, overlay=true, watermark=true }: Props){
   const [loaded, setLoaded] = useState(false)
   return (
     <figure className="relative block w-full h-full rounded-xl bg-neutral-200">

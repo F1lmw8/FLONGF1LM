@@ -1,11 +1,9 @@
 'use client'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import React, { useState } from 'react'
 
 export default function AdminLoginPage(){
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  const router = useRouter()
 
   async function handleSubmit(e: React.FormEvent){
     e.preventDefault()

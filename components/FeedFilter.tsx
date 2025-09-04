@@ -13,7 +13,7 @@ export default function FeedFilter({
   allItems, onChange,
 }:{
   allItems: FeedItem[];
-  onChange: (filtered: FeedItem[], state: FilterState)=>void
+  onChange: (filtered: FeedItem[])=>void
 }) {
   const [q,setQ] = useState('')
   const [tag,setTag] = useState('')
@@ -33,7 +33,7 @@ export default function FeedFilter({
       const matchTag = nextTag ? (i.tags||[]).includes(nextTag) : true
       return matchQ && matchTag
     })
-    onChange(filtered, { q: nextQ, tag: nextTag })
+    onChange(filtered)
   }
 
   const previewCount = useMemo(()=>{

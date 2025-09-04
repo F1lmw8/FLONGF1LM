@@ -11,11 +11,11 @@ export default function AdminNav(){
     const onCustom = ()=> update()
     const onVisibility = ()=> update()
     window.addEventListener('storage', onStorage)
-    window.addEventListener('admin-auth-changed', onCustom as EventListener)
+    window.addEventListener('admin-auth-changed', onCustom)
     document.addEventListener('visibilitychange', onVisibility)
     return ()=> {
       window.removeEventListener('storage', onStorage)
-      window.removeEventListener('admin-auth-changed', onCustom as EventListener)
+      window.removeEventListener('admin-auth-changed', onCustom)
       document.removeEventListener('visibilitychange', onVisibility)
     }
   }, [])

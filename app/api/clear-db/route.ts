@@ -4,7 +4,7 @@ import pool from '@/lib/database'
 
 export const runtime = 'nodejs'
 
-export async function POST(req: NextRequest){
+export async function POST(){
   const cookieStore = await cookies()
   const isAuthed = cookieStore.get('admin')?.value === '1'
   if (!isAuthed) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
