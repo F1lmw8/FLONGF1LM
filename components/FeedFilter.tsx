@@ -13,7 +13,8 @@ export default function FeedFilter({
   allItems, onChange,
 }:{
   allItems: FeedItem[];
-  onChange: (filtered: FeedItem[])=>void
+  // eslint-disable-next-line no-unused-vars
+  onChange: (items: FeedItem[])=>void
 }) {
   const [q,setQ] = useState('')
   const [tag,setTag] = useState('')

@@ -71,6 +71,7 @@ export default function AdminManagePage(){
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {items.map(i=> (
           <div key={i.id} className="border rounded-lg overflow-hidden">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={i.src} alt={i.alt||''} className="w-full h-32 object-cover" />
             <div className="p-2 text-xs">
               <p className="truncate">{i.alt}</p>
