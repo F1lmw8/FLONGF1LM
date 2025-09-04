@@ -136,7 +136,9 @@ export async function POST(req: NextRequest) {
     
     // Initialize database if needed
     try {
+      console.log('Initializing database...')
       await initDatabase()
+      console.log('Database initialized successfully')
     } catch (initError) {
       console.error('Database initialization failed:', initError)
       return NextResponse.json({
@@ -149,9 +151,12 @@ export async function POST(req: NextRequest) {
       }, { status: 500 })
     }
     
+    console.log(`Saving ${entries.length} entries to database...`)
     for (const entry of entries) {
       try {
+        console.log(`Saving entry: ${entry.id} - ${entry.alt}`)
         await addPhoto(entry)
+        console.log(`Successfully saved: ${entry.id}`)
       } catch (dbError) {
         console.error(`Error saving to database:`, dbError)
         // Remove from entries if database save failed
@@ -165,6 +170,7 @@ export async function POST(req: NextRequest) {
         }
       }
     }
+    console.log(`Database save completed. ${entries.length} entries saved successfully.`)
 
     // Return response based on success/failure
     if (entries.length === 0) {
