@@ -52,7 +52,9 @@ export async function getAllPhotos() {
     const result = await pool.query(`
       SELECT 
         id, src, w, h, alt, date, tags, watermark, overlay,
-        camera, lens, f_number as "fNumber", iso,
+        camera, lens, 
+        CASE WHEN f_number IS NOT NULL THEN f_number::float / 10 ELSE NULL END as "fNumber",
+        iso,
         album_id as "albumId", album_title as "albumTitle"
       FROM photos 
       ORDER BY created_at DESC
@@ -108,7 +110,15 @@ export async function updatePhoto(id: string, updates: any) {
       })
       .join(', ')
     
-    const values = [id, ...Object.values(updates)]
+    // Convert fNumber to integer if present
+    const processedUpdates = { ...updates }
+    if (processedUpdates.fNumber !== undefined) {
+      processedUpdates.fNumber = processedUpdates.fNumber && !isNaN(processedUpdates.fNumber) 
+        ? Math.round(processedUpdates.fNumber * 10) 
+        : null
+    }
+    
+    const values = [id, ...Object.values(processedUpdates)]
     
     const result = await pool.query(`
       UPDATE photos 

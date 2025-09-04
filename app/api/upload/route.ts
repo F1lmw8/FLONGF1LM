@@ -115,7 +115,7 @@ export async function POST(req: NextRequest) {
           overlay,
           camera,
           lens,
-          fNumber,
+          fNumber: fNumber && !isNaN(fNumber) ? Math.round(fNumber * 10) : null, // Convert to integer (e.g., 4.5 -> 45)
           iso,
           albumId: albumId || undefined,
           albumTitle: albumTitle || undefined
