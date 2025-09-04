@@ -32,7 +32,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Link className="rounded-full px-3 py-2 hover:bg-neutral-100 transition" href="/gallery">Gallery</Link>
                 <Link className="rounded-full px-3 py-2 hover:bg-neutral-100 transition" href="/about">About</Link>
                 {/* Admin menu shows only when cookie is set (SSR, no flicker) */}
-                {/* @ts-expect-error Server Component */}
                 <AdminNavServer />
               </div>
             </nav>
