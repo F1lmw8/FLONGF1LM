@@ -5,6 +5,9 @@ export const runtime = 'nodejs'
 export async function POST(req: NextRequest){
   const { password } = await req.json()
   const secret = process.env.ADMIN_SECRET
+  console.log('Password received:', password)
+  console.log('Secret from env:', secret)
+  console.log('Match:', password === secret)
   if (!secret || password !== secret){
     return NextResponse.json({ ok: false, error: 'Invalid password' }, { status: 401 })
   }
