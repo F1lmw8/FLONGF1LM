@@ -3,7 +3,9 @@ import { useEffect, useState } from 'react'
 
 type Item = {
   id:string; src:string; w:number; h:number; alt?:string;
-  date?:string; tags?:string[]; watermark?:boolean; overlay?:boolean
+  date?:string; tags?:string[]; watermark?:boolean; overlay?:boolean;
+  camera?:string; lens?:string; fNumber?:number; iso?:number;
+  albumId?:string; albumTitle?:string;
 }
 
 export default function AdminManagePage(){
