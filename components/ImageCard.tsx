@@ -18,8 +18,8 @@ export default function ImageCard({ src, w, h, alt='', caption, info, overlay=tr
   return (
     <figure className="relative block w-full h-full rounded-xl bg-neutral-200">
       <div className={`${watermark ? 'relative watermark' : 'relative'} w-full h-full`}>
-        <img
-          src={src} alt={alt}
+        <Image
+          src={src} alt={alt} width={w} height={h}
           className={`w-full h-full object-cover transition duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
           onLoad={()=>setLoaded(true)}
           loading="lazy"
