@@ -1,9 +1,7 @@
 'use client'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
 
 export default function AdminUploadPage(){
-  const router = useRouter()
   const [files, setFiles] = useState<File[]>([])
   const [alt, setAlt] = useState('')
   const [caption, setCaption] = useState('')
@@ -39,18 +37,51 @@ export default function AdminUploadPage(){
     form.append('albumId', albumId)
     form.append('albumTitle', albumTitle)
 
-    const res = await fetch('/api/upload', {
-      method: 'POST',
-      body: form
-    })
-    if (!res.ok){ setStatus('อัปโหลดล้มเหลว'); return }
-    const json = await res.json()
-    if (json.success){
-      setStatus(`อัปโหลดสำเร็จ! (+${files.length} รูป)`) 
-      setFiles([]); setAlt(''); setCaption(''); setTags(''); setWatermark(true); setOverlay(true); setCamera(''); setLens(''); setFNumber(''); setIso(''); setAlbumId(''); setAlbumTitle('')
-    } else {
-      setStatus('อัปโหลดล้มเหลว')
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: form
+      })
+      
+      if (!res.ok) {
+        setStatus('อัปโหลดล้มเหลว')
+        return
+      }
+      
+      const json = await res.json()
+      
+      if (json.ok) {
+        const successCount = json.entries?.length || 0
+        const errorCount = json.errors?.length || 0
+        
+        let statusMessage = `อัปโหลดสำเร็จ! (+${successCount} รูป)`
+        if (errorCount > 0) {
+          statusMessage += ` (ล้มเหลว ${errorCount} รูป)`
+        }
+        
+        setStatus(statusMessage)
+        
+        // Reset form only if all files succeeded
+        if (errorCount === 0) {
+          setFiles([])
+          setAlt('')
+          setCaption('')
+          setTags('')
+          setWatermark(true)
+          setOverlay(true)
+          setCamera('')
+          setLens('')
+          setFNumber('')
+          setIso('')
+          setAlbumId('')
+          setAlbumTitle('')
+        }
+      } else {
+              setStatus(`อัปโหลดล้มเหลว: ${json.error}`)
     }
+  } catch {
+    setStatus('อัปโหลดล้มเหลว: เกิดข้อผิดพลาดในการเชื่อมต่อ')
+  }
   }
 
   useEffect(()=>{
@@ -66,7 +97,9 @@ export default function AdminUploadPage(){
           const f = parsed.FNumber || (parsed.ApertureValue && Number((parsed.ApertureValue)))
           if (f) setFNumber(String(Number(f)))
         }
-      } catch(err){ /* ignore */ }
+      } catch {
+        /* ignore */
+      }
     }
     run()
     // eslint-disable-next-line react-hooks/exhaustive-deps
