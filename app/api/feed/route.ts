@@ -1,14 +1,20 @@
 import { NextResponse } from 'next/server'
-import { promises as fs } from 'fs'
-import path from 'path'
+import { getAllPhotos, initDatabase } from '@/lib/database'
 
 export const runtime = 'nodejs'
 
 export async function GET(){
-  const feedPath = path.join(process.cwd(), 'data', 'feed.json')
-  const raw = await fs.readFile(feedPath, 'utf8')
-  const items = JSON.parse(raw)
-  return NextResponse.json({ items })
+  try {
+    // Initialize database if needed
+    await initDatabase()
+    
+    // Get all photos from database
+    const items = await getAllPhotos()
+    return NextResponse.json({ items })
+  } catch (error) {
+    console.error('Error getting feed:', error)
+    return NextResponse.json({ items: [] })
+  }
 }
 
 

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
-import { promises as fs } from 'fs'
-import path from 'path'
+import { deletePhoto, updatePhoto } from '@/lib/database'
 import cloudinary from '@/lib/cloudinary'
 
 export const runtime = 'nodejs'
@@ -13,23 +12,30 @@ export async function DELETE(req: NextRequest){
   const { id } = await req.json() as { id:string }
   if (!id) return NextResponse.json({ error: 'Missing id' }, { status: 400 })
 
-  const feedPath = path.join(process.cwd(), 'data', 'feed.json')
-  const raw = await fs.readFile(feedPath, 'utf8')
-  const list = JSON.parse(raw)
-  const idx = list.findIndex((x:any)=> x.id === id)
-  if (idx === -1) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-  const removed = list.splice(idx,1)[0]
-  await fs.writeFile(feedPath, JSON.stringify(list, null, 2))
+  try {
+    // Get photo from database before deleting
+    const { getAllPhotos } = await import('@/lib/database')
+    const photos = await getAllPhotos()
+    const photo = photos.find(p => p.id === id)
+    
+    if (!photo) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
-  // Try remove file from Cloudinary
-  try{
-    if (removed?.src && removed.src.includes('cloudinary.com')){
-      const publicId = removed.src.split('/').slice(-2).join('/').replace(/\.[^/.]+$/, "")
-      await cloudinary.uploader.destroy(publicId)
-    }
-  } catch {}
+    // Delete from database
+    await deletePhoto(id)
 
-  return NextResponse.json({ success:true })
+    // Try remove file from Cloudinary
+    try{
+      if (photo?.src && photo.src.includes('cloudinary.com')){
+        const publicId = photo.src.split('/').slice(-2).join('/').replace(/\.[^/.]+$/, "")
+        await cloudinary.uploader.destroy(publicId)
+      }
+    } catch {}
+
+    return NextResponse.json({ success:true })
+  } catch (error) {
+    console.error('Delete error:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
 }
 
 export async function PATCH(req: NextRequest){
@@ -39,14 +45,15 @@ export async function PATCH(req: NextRequest){
   const body = await req.json() as any
   const { id, ...updates } = body || {}
   if (!id) return NextResponse.json({ error: 'Missing id' }, { status: 400 })
-  const feedPath = path.join(process.cwd(), 'data', 'feed.json')
-  const raw = await fs.readFile(feedPath, 'utf8')
-  const list = JSON.parse(raw)
-  const idx = list.findIndex((x:any)=> x.id === id)
-  if (idx === -1) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-  list[idx] = { ...list[idx], ...updates }
-  await fs.writeFile(feedPath, JSON.stringify(list, null, 2))
-  return NextResponse.json({ success: true, item: list[idx] })
+
+  try {
+    const updatedItem = await updatePhoto(id, updates)
+    if (!updatedItem) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    return NextResponse.json({ success: true, item: updatedItem })
+  } catch (error) {
+    console.error('Update error:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
 }
 
 

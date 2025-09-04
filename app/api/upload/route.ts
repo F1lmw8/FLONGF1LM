@@ -87,11 +87,11 @@ export async function POST(req: NextRequest){
     entries.push(entry)
   }
 
-  const feedPath = path.join(process.cwd(), 'data', 'feed.json')
-  const raw = await fs.readFile(feedPath, 'utf8')
-  const list = JSON.parse(raw)
-  list.push(...entries)
-  await fs.writeFile(feedPath, JSON.stringify(list, null, 2))
+  // Save to database instead of file
+  const { addPhoto } = await import('@/lib/database')
+  for (const entry of entries) {
+    await addPhoto(entry)
+  }
 
   return NextResponse.json({ success: true, entries })
 }

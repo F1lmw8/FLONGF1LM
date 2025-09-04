@@ -10,11 +10,13 @@
     "postinstall": "tailwindcss -i ./app/globals.css -o ./public/tw.css"
   },
   "dependencies": {
+    "@types/pg": "^8.15.5",
     "cloudinary": "^2.7.0",
     "exifr": "^7.1.3",
     "formidable": "^3.5.1",
     "image-size": "^1.2.1",
     "next": "latest",
+    "pg": "^8.16.3",
     "react": "latest",
     "react-dom": "latest",
     "yet-another-react-lightbox": "latest"
