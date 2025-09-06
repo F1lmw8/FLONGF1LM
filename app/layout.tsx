@@ -11,8 +11,8 @@ export const metadata: Metadata = {
     title: 'f1lm_w8 — Photo Portfolio',
     description: 'Street • Portrait • Travel — by F1lmW8',
     type: 'website',
-    url: 'https://your-domain.example', // ใส่โดเมนจริงเมื่อพร้อม
-    siteName: 'f1lm_w8 Photofolio',
+    url: 'https://flongf1lm.onrender.com', // ใส่โดเมนจริงเมื่อพร้อม
+    siteName: 'f1lm_w8 Photolio',
   },
   twitter: {
     card: 'summary_large_image'

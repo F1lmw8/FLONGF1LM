@@ -5,8 +5,8 @@ export default function Home() {
     <section className="py-8">
       <div className="relative rounded-2xl overflow-hidden">
         <Image
-          src="/images/hero.jpg"
-          alt="Hero"
+          src="/portfolio-clean/public/uploads/03-09-68/MEITU_20250903_215141922.JPEG"
+          alt=""
           width={2000} height={1200} priority
           className="w-full h-auto object-cover"
         />
@@ -17,8 +17,8 @@ export default function Home() {
         </div>
       </div>
       <div className="mt-8 grid md:grid-cols-3 gap-6">
-        <Card title="Gallery" href="/gallery" desc="ภาพคัดพิเศษ 12–24 ใบ โทนคุมเดียวกัน" />
-        <Card title="Projects" href="/projects" desc="โปรเจกต์เล่าเรื่องเป็นชุด ๆ" />
+        <Card title="Gallery" href="/gallery" desc="รวมรูปภาพทั้งหมด" />
+        <Card title="Projects" href="/projects" desc="วางแผนไว้้ในอนาคต" />
         <Card title="About" href="/about" desc="ติดต่อร่วมงาน / โพรไฟล์" />
       </div>
     </section>
