@@ -18,7 +18,7 @@ export default function Home() {
       </div>
       <div className="mt-8 grid md:grid-cols-3 gap-6">
         <Card title="Gallery" href="/gallery" desc="รวมรูปภาพทั้งหมด" />
-        <Card title="Projects" href="/projects" desc="วางแผนไว้้ในอนาคต" />
+        <Card title="Projects" href="/projects" desc="วางแผนไว้ในอนาคต" />
         <Card title="About" href="/about" desc="ติดต่อร่วมงาน / โพรไฟล์" />
       </div>
     </section>
