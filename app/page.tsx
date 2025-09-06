@@ -5,7 +5,7 @@ export default function Home() {
     <section className="py-8">
       <div className="relative rounded-2xl overflow-hidden">
         <Image
-          src="/portfolio-clean/public/uploads/03-09-68/MEITU_20250903_215141922.JPEG"
+          src="/public/uploads/03-09-68/MEITU_20250903_215141922.JPEG"
           alt=""
           width={2000} height={1200} priority
           className="w-full h-auto object-cover"
