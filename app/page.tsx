@@ -3,9 +3,9 @@ import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 
 const heroImages = [
-  'https://res.cloudinary.com/dsmbionbb/image/upload/v1757027333/portfolio/Tawan-03-09-68/MEITU_20250903_215055571.jpg',
-  'https://res.cloudinary.com/dsmbionbb/image/upload/v1757027333/portfolio/Tawan-03-09-68/MEITU_20250903_215141922.jpg',
-  // 👉 เพิ่ม Cloudinary URL ได้เรื่อย ๆ
+  'uploads/03-09-68/MEITU_20250903_215055571.JPEG',
+  'uploads/03-09-68/MEITU_20250903_215141922.JPEG',
+  'uploads/03-09-68/MEITU_20250903_215321570.JPEG',
 ]
 
 export default function Home() {
